@@ -1,7 +1,17 @@
 with open("movies.txt", "r") as infile:
   with open("movie_id.txt", "a") as outfile:
     for line in infile:
-      # write logic for getting id from OMDB API.
-      # The id should be written in a new line in
-      # the file movie_id.txt.
-      print line
+        import json, requests, urllib
+      	data = {}
+      	data['t'] = line
+      	data['y'] = ""
+      	data['plot'] = 'short'
+      	data['r'] = 'json'
+      	url_values = urllib.urlencode(data)
+      	url = "http://www.omdbapi.com/"
+      	full_url = url + '?' + url_values
+      	response = requests.get(full_url)
+      	metadata = json.loads(response.text)
+      	imdb_id = (metadata ['imdbID'] + '\n')
+      	outfile.write(imdb_id)
+ 
